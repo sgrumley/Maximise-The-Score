@@ -2,32 +2,6 @@
 
 import heapTuple
 
-#needs cleaning
-def checkMax(heap):
-    listofRustyChoice=[]
-    listofRustyChoice.append(heap.delete_min(1))
-    if len(heap)== 0:
-        return listofRustyChoice[0], heap
-    #Create a list of options for Rusty (same summed values)
-    while(heap.peek()[1] == listofRustyChoice[0][1]):
-        #print("--------------------()()()")
-        listofRustyChoice.append(heap.delete_min(person))
-        if len(heap)== 0:
-            break
-    #print("options for rusty to take:", listofRustyChoice)
-    max = 0
-    #find the best choice for rusty based on the actual value
-    for j in range(len(listofRustyChoice)):
-        if listofRustyChoice[j][0] > listofRustyChoice[j][max]:
-            max = j
-    #print("max", listofRustyChoice[max])
-    #toSeewhatHappening = listofRustyChoice[max]
-    #any values not used got back into the list
-    for j in range(len(listofRustyChoice)):
-        if j != max:
-            #print("getting inserted",listofRustyChoice[j])
-            heap.insert(listofRustyChoice[j],person)
-    return listofRustyChoice[max], heap
 
 file = open("input.txt", "r")
 i = 0
@@ -68,17 +42,13 @@ for i in range(int(numTests)):
     #TestCase
     #i=3
     #TestCase
-    maxTurns = testVars[i][1]
-    numBalls = testVars[i][0]
-    ballVals = testVars[i][2]
-    flipResult = testVars[i][3]
     print("data")
     print("Number of balls",testVars[i][0])
     print("Max allowed turns",testVars[i][1])
     print("values on the balls",testVars[i][2])
     print("result of the coint toss",testVars[i][3])
     person = 0
-    if flipResult == 'TAILS':
+    if testVars[i][3] == 'TAILS':
         person = 1
 
     print("1 = rusty, 0 = Scott")
@@ -87,11 +57,11 @@ for i in range(int(numTests)):
 
     #Setup data structures
     tupheap = heapTuple.BinaryHeap()
-    for j in range(len(ballVals)):
+    for j in range(len(testVars[i][2])):
         sumVal = 0
-        for k in range(len(ballVals[j])):
-            sumVal += int(ballVals[j][k])
-        tupheap.insert((int(ballVals[j]), sumVal),person)
+        for k in range(len(testVars[i][2][j])):
+            sumVal += int(testVars[i][2][j][k])
+        tupheap.insert((int(testVars[i][2][j]), sumVal),person)
 
     print("initial dataset")
     print(tupheap.items)
@@ -100,17 +70,15 @@ for i in range(int(numTests)):
     playerSum = [0,0]
     #while there are still balls on the table
     while(len(tupheap)>0):
-        for x in range(1,len(tupheap)):
-            tupheap.upHeap(person)
-        tupheap.downHeap(1,person)
         #loop through players turns
-        for z in range(maxTurns):
-            #print(tupheap.items)
-            if person == 1:
-                toSeewhatHappening, tupheap = checkMax(tupheap)
+        for z in range(testVars[i][1]):
+            if z+1 == testVars[i][1]:
+                toSeewhatHappening = tupheap.delete_min(1 - person)
             else:
                 toSeewhatHappening = tupheap.delete_min(person)
-            print("chosen:",toSeewhatHappening)
+            print("Choice:",toSeewhatHappening)
+            #toSeewhatHappening = tupheap.delete_min(person)
+            #print(toSeewhatHappening)
             playerSum[person] += toSeewhatHappening[0]
         print("end turn for",person)
         print()
@@ -124,8 +92,8 @@ for i in range(int(numTests)):
     #break
     #TestCase
 print("final",results)
-print("actua [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [30031, 17796], [4726793900, 3941702128], [13793, 12543], [2173, 1665], [3923529875, 3049188235], [0, 284401]")
-print("git c [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [31012, 16815], [4726793900, 3941702128], [13669, 12667], [2157, 1681], [4285558378, 2687159732], [0, 284401]]")
+
+
 
 
 #finds a prioritylist for rusty

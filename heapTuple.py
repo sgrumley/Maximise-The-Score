@@ -33,11 +33,16 @@ class BinaryHeap(object):
         return i * 2 + 1
 
     def delete_min(self,person):
+        if len(self) == 0:
+            return (0,0)
         return_value = self.items[1]
         self.items[1] = self.items[len(self)]
         self.items.pop()
         self.downHeap(1, person)
         return return_value
+
+    def peek(self):
+        return self.items[1]
 
     def buildHeap(self, alist):
         i = len(alist) // 2
