@@ -1,7 +1,34 @@
-
-
 import heapTuple
 
+def checkMax(heap,person):
+    listofRustyChoice=[]
+    listofRustyChoice.append(heap.delete_min(1))
+    if len(heap)== 0:
+        return listofRustyChoice[0], heap
+    #Create a list of options for Rusty (same summed values)
+    while(heap.peek()[1] == listofRustyChoice[0][1]):
+        #print("--------------------()()()")
+        listofRustyChoice.append(heap.delete_min(1))
+        if len(heap)== 0:
+            break
+    #print("options for rusty to take:", listofRustyChoice)
+    max = 0
+    #find the best choice for rusty based on the actual value
+    for j in range(len(listofRustyChoice)):
+        if listofRustyChoice[j][0] > listofRustyChoice[j][max]:
+            max = j
+    #print("max", listofRustyChoice[max])
+    #toSeewhatHappening = listofRustyChoice[max]
+    #any values not used got back into the list
+    for j in range(len(listofRustyChoice)):
+        if j != max:
+            #print("getting inserted",listofRustyChoice[j])
+            heap.insert(listofRustyChoice[j],1)
+
+    for x in range(len(tupheap)):
+        tupheap.upHeap(person)
+    #tupheap.downHeap(1,person)
+    return listofRustyChoice[max], heap
 
 file = open("input.txt", "r")
 i = 0
@@ -24,9 +51,8 @@ for line in file:
         data = line.split()
     if i == 3:
         gofirst = line.split()[0]
-
-    #call function to compute
     i+=1
+
 temp =[]
 temp.append(n)
 temp.append(k)
@@ -72,10 +98,14 @@ for i in range(int(numTests)):
     while(len(tupheap)>0):
         #loop through players turns
         for z in range(testVars[i][1]):
-            if z+1 == testVars[i][1]:
-                toSeewhatHappening = tupheap.delete_min(1 - person)
-            else:
+            if person == 1 and z+1 != testVars[i][1]:
+                toSeewhatHappening, tupheap = checkMax(tupheap,person)
+            elif person == 0 and z+1 != testVars[i][1]:
                 toSeewhatHappening = tupheap.delete_min(person)
+            elif person == 1 and z+1 == testVars[i][1]:
+                toSeewhatHappening, tupheap = checkMax(tupheap,1-person)
+            elif person == 0 and z+1 == testVars[i][1]:
+                toSeewhatHappening = tupheap.delete_min(1 - person)
             print("Choice:",toSeewhatHappening)
             #toSeewhatHappening = tupheap.delete_min(person)
             #print(toSeewhatHappening)
@@ -92,6 +122,7 @@ for i in range(int(numTests)):
     #break
     #TestCase
 print("final",results)
+print("actua [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [30031, 17796], [4726793900, 3941702128], [13793, 12543], [2173, 1665], [3923529875, 3049188235], [0, 284401]")
 
 
 

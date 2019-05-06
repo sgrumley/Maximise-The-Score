@@ -2,6 +2,30 @@
 
 import heapTuple
 
+def heapify(arr, n, i,person):
+    largest = i  # Initialize largest as root
+    l = 2 * i + 1     # left = 2*i + 1
+    r = 2 * i + 2     # right = 2*i + 2
+
+    # See if left child of root exists and is
+    # greater than root
+    if l < n and arr[i][person] < arr[l][person]:
+        largest = l
+
+    # See if right child of root exists and is
+    # greater than root
+    if r < n and arr[largest][person] < arr[r][person]:
+        largest = r
+
+    # Change root, if needed
+    if largest != i:
+        arr[i],arr[largest] = arr[largest],arr[i]  # swap
+
+        # Heapify the root.
+        heapify(arr, n, largest,person)
+
+
+
 #needs cleaning
 def checkMax(heap):
     listofRustyChoice=[]
@@ -11,22 +35,21 @@ def checkMax(heap):
     #Create a list of options for Rusty (same summed values)
     while(heap.peek()[1] == listofRustyChoice[0][1]):
         #print("--------------------()()()")
-        listofRustyChoice.append(heap.delete_min(person))
+        listofRustyChoice.append(heap.delete_min(1))
         if len(heap)== 0:
             break
-    #print("options for rusty to take:", listofRustyChoice)
+    if len(listofRustyChoice) == 1:
+        return listofRustyChoice[0], heap
     max = 0
     #find the best choice for rusty based on the actual value
     for j in range(len(listofRustyChoice)):
         if listofRustyChoice[j][0] > listofRustyChoice[j][max]:
             max = j
-    #print("max", listofRustyChoice[max])
-    #toSeewhatHappening = listofRustyChoice[max]
     #any values not used got back into the list
     for j in range(len(listofRustyChoice)):
         if j != max:
             #print("getting inserted",listofRustyChoice[j])
-            heap.insert(listofRustyChoice[j],person)
+            heap.insert(listofRustyChoice[j],1)
     return listofRustyChoice[max], heap
 
 file = open("input.txt", "r")
@@ -66,7 +89,7 @@ print(len(testVars))
 results=[]
 for i in range(int(numTests)):
     #TestCase
-    #i=3
+    #i=4
     #TestCase
     maxTurns = testVars[i][1]
     numBalls = testVars[i][0]
@@ -100,9 +123,14 @@ for i in range(int(numTests)):
     playerSum = [0,0]
     #while there are still balls on the table
     while(len(tupheap)>0):
-        for x in range(1,len(tupheap)):
-            tupheap.upHeap(person)
+
+        n = len(tupheap)
+        for i in range(n, 0, -1):
+            heapify(tupheap.items, n, i,person)
+
+        tupheap.upHeap(person)
         tupheap.downHeap(1,person)
+
         #loop through players turns
         for z in range(maxTurns):
             #print(tupheap.items)
@@ -110,12 +138,12 @@ for i in range(int(numTests)):
                 toSeewhatHappening, tupheap = checkMax(tupheap)
             else:
                 toSeewhatHappening = tupheap.delete_min(person)
-            print("chosen:",toSeewhatHappening)
+            #print("chosen:",toSeewhatHappening)
             playerSum[person] += toSeewhatHappening[0]
-        print("end turn for",person)
-        print()
+        #print("end turn for",person)
+        #print()
         person = 1-person
-        print("start turn for",person)
+        #print("start turn for",person)
 
     print(playerSum)
     results.append(playerSum)
@@ -123,10 +151,10 @@ for i in range(int(numTests)):
     #TestCase
     #break
     #TestCase
-print("final",results)
-print("actua [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [30031, 17796], [4726793900, 3941702128], [13793, 12543], [2173, 1665], [3923529875, 3049188235], [0, 284401]")
-print("git c [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [31012, 16815], [4726793900, 3941702128], [13669, 12667], [2157, 1681], [4285558378, 2687159732], [0, 284401]]")
 
+#print("git c [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [31012, 16815], [4726793900, 3941702128], [13669, 12667], [2157, 1681], [4285558378, 2687159732], [0, 284401]]")
+print("actua [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [30031, 17796], [4726793900, 3941702128], [13793, 12543], [2173, 1665], [3923529875, 3049188235], [0, 284401]")
+print("final",results)
 
 #finds a prioritylist for rusty
 #summedResults =[]

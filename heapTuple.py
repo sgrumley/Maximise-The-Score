@@ -17,7 +17,7 @@ class BinaryHeap(object):
         self.items.append(item)
         self.upHeap(person)
 
-    #
+
     def downHeap(self, i, person):
         while i * 2 <= len(self):
             mc = self.min_child(i, person)
