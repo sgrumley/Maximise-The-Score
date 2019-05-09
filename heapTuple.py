@@ -1,4 +1,4 @@
-class BinaryHeap(object):
+class PriorityQueue(object):
     def __init__(self):
         self.items = [0]
 
@@ -25,6 +25,7 @@ class BinaryHeap(object):
                 self.items[i], self.items[mc] = self.items[mc], self.items[i]
             i = mc
 
+    #can this be simplified to the last val in array
     def min_child(self, i,person ):
         if i * 2 + 1 > len(self):
             return i * 2
@@ -32,56 +33,20 @@ class BinaryHeap(object):
             return i * 2
         return i * 2 + 1
 
-    def delete_min(self,person):
+    def removeMax(self,person):
         if len(self) == 0:
             return (0,0)
-        return_value = self.items[1]
+        max = self.items[1]
         self.items[1] = self.items[len(self)]
         self.items.pop()
         self.downHeap(1, person)
-        return return_value
+        return max
 
     def peek(self):
         return self.items[1]
 
-    def buildHeap(self, person):
+    def heapify(self, person):
         i = len(self.items)
-        #self.items = [0] + alist
         while i > 0:
             self.downHeap(i,person)
             i = i - 1
-
-"""
-#how to change priority
-for i in range(1,len(heaptestShuffle)):
-    heaptestShuffle.upHeap(person)
-print(heaptestShuffle.items)
-person = 0
-#how to change priority
-for i in range(1,len(heaptestShuffle)):
-    heaptestShuffle.upHeap(person)
-print(heaptestShuffle.items)
-"""
-"""
-heaptest = BinaryHeap()
-heaptest.insert((21,35),0)
-heaptest.insert((84,27),0)
-heaptest.insert((36,91),0)
-heaptest.insert((38,95),0)
-print(heaptest.items)
-
-heaptest.buildHeap(1)
-print("right side")
-print(heaptest.delete_min(1))
-heaptest.buildHeap(0)
-print("left side")
-print(heaptest.delete_min(0))
-heaptest.buildHeap(1)
-print("right side")
-print(heaptest.delete_min(1))
-heaptest.buildHeap(0)
-print("left side")
-print(heaptest.delete_min(0))
-
-print(heaptest.items)
-"""
