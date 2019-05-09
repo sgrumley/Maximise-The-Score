@@ -1,7 +1,9 @@
 
-
+import time
 import heapTuple
 
+
+# check this implementation does it check less options?
 def heapify(arr, n, i,person):
     largest = i  # Initialize largest as root
     l = 2 * i + 1     # left = 2*i + 1
@@ -26,7 +28,7 @@ def heapify(arr, n, i,person):
 
 
 
-#needs cleaning
+#needs cleaning # break code into less options and verify before calling
 def checkMax(heap):
     listofRustyChoice=[]
     listofRustyChoice.append(heap.delete_min(1))
@@ -52,11 +54,17 @@ def checkMax(heap):
             heap.insert(listofRustyChoice[j],1)
     return listofRustyChoice[max], heap
 
+def readFile():
+    print("ee")
+
+
 file = open("input.txt", "r")
 i = 0
 testVars = []
 for line in file:
-    if i == 4:
+    if i == 0:
+        numTests = int(line.split()[0])
+    if i == 4 or i == numTests-1:
         temp =[]
         temp.append(n)
         temp.append(k)
@@ -64,8 +72,7 @@ for line in file:
         temp.append(gofirst)
         testVars.append(temp)
         i=1
-    if i == 0:
-        numTests = line.split()[0]
+
     if i == 1:
         placehold = line.split()
         n,k = int(placehold[0]),int(placehold[1])
@@ -73,40 +80,44 @@ for line in file:
         data = line.split()
     if i == 3:
         gofirst = line.split()[0]
-
-    #call function to compute
     i+=1
+
 temp =[]
+"""
+print("rgkurgnkjsnfksjenfksjenfksefskejfskebfaljsbrflkjrflkb")
 temp.append(n)
 temp.append(k)
 temp.append(data)
 temp.append(gofirst)
 testVars.append(temp)
+"""
 file.close()
 
-print(numTests, "tests total")
-print(len(testVars))
+print("Total test cases:",numTests)
+
 results=[]
+#Iterate through all test cases
 for i in range(int(numTests)):
-    #TestCase
-    #i=4
-    #TestCase
+    #Declare variables with more readable names
     maxTurns = testVars[i][1]
     numBalls = testVars[i][0]
     ballVals = testVars[i][2]
     flipResult = testVars[i][3]
-    print("data")
-    print("Number of balls",testVars[i][0])
-    print("Max allowed turns",testVars[i][1])
-    print("values on the balls",testVars[i][2])
-    print("result of the coint toss",testVars[i][3])
+
+    #Print arguments for test case i
+    print()
+    print()
+    print("Test Case:", i+1)
+    print("-----------------------------------------------------------------------------------------")
+    print("Number of balls on the table: ",testVars[i][0])
+    print("Max turns allowed:",testVars[i][1])
+    print("Result of the coint toss:",testVars[i][3])
     person = 0
     if flipResult == 'TAILS':
         person = 1
-
     print("1 = rusty, 0 = Scott")
     print("person: ",person)
-    print("-----------------------------------------------------------------------------------------")
+
 
     #Setup data structures
     tupheap = heapTuple.BinaryHeap()
@@ -116,57 +127,26 @@ for i in range(int(numTests)):
             sumVal += int(ballVals[j][k])
         tupheap.insert((int(ballVals[j]), sumVal),person)
 
-    print("initial dataset")
-    print(tupheap.items)
-    print("-----------------------------------------------------------------------------------------")
-
     playerSum = [0,0]
+    startTime=time.perf_counter()
     #while there are still balls on the table
     while(len(tupheap)>0):
-
-        n = len(tupheap)
-        for i in range(n, 0, -1):
-            heapify(tupheap.items, n, i,person)
-
-        tupheap.upHeap(person)
-        tupheap.downHeap(1,person)
-
+        tupheap.buildHeap(person)
         #loop through players turns
         for z in range(maxTurns):
-            #print(tupheap.items)
+            #maybe pull pick then check peek and person 1 to determine whether check max should even be called
             if person == 1:
                 toSeewhatHappening, tupheap = checkMax(tupheap)
             else:
                 toSeewhatHappening = tupheap.delete_min(person)
-            #print("chosen:",toSeewhatHappening)
             playerSum[person] += toSeewhatHappening[0]
-        #print("end turn for",person)
-        #print()
         person = 1-person
-        #print("start turn for",person)
 
-    print(playerSum)
+    print()
+    print("Time taken: ", time.perf_counter() - startTime)
+    print("Sum of players:",playerSum)
+    print("-----------------------------------------------------------------------------------------")
     results.append(playerSum)
 
-    #TestCase
-    #break
-    #TestCase
-
-#print("git c [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [31012, 16815], [4726793900, 3941702128], [13669, 12667], [2157, 1681], [4285558378, 2687159732], [0, 284401]]")
 print("actua [[1000, 197], [240, 150], [2100000000, 98888899], [9538, 2256], [30031, 17796], [4726793900, 3941702128], [13793, 12543], [2173, 1665], [3923529875, 3049188235], [0, 284401]")
 print("final",results)
-
-#finds a prioritylist for rusty
-#summedResults =[]
-
-
-
-
-
-
-
-"""
-somehow take the largest if there are multiple
-error handling for delete_min
-implement peek at min -> peek to see if the next number is the same
-"""

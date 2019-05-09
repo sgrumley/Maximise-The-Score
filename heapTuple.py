@@ -44,11 +44,11 @@ class BinaryHeap(object):
     def peek(self):
         return self.items[1]
 
-    def buildHeap(self, alist):
-        i = len(alist) // 2
-        self.items = [0] + alist
+    def buildHeap(self, person):
+        i = len(self.items)
+        #self.items = [0] + alist
         while i > 0:
-            self.downHeap(i)
+            self.downHeap(i,person)
             i = i - 1
 
 """
@@ -61,4 +61,27 @@ person = 0
 for i in range(1,len(heaptestShuffle)):
     heaptestShuffle.upHeap(person)
 print(heaptestShuffle.items)
+"""
+"""
+heaptest = BinaryHeap()
+heaptest.insert((21,35),0)
+heaptest.insert((84,27),0)
+heaptest.insert((36,91),0)
+heaptest.insert((38,95),0)
+print(heaptest.items)
+
+heaptest.buildHeap(1)
+print("right side")
+print(heaptest.delete_min(1))
+heaptest.buildHeap(0)
+print("left side")
+print(heaptest.delete_min(0))
+heaptest.buildHeap(1)
+print("right side")
+print(heaptest.delete_min(1))
+heaptest.buildHeap(0)
+print("left side")
+print(heaptest.delete_min(0))
+
+print(heaptest.items)
 """
