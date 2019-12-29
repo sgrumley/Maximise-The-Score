@@ -1,7 +1,9 @@
+# Main function. All control of the game comes from here
 import time
 import heapTuple
 
-#needs cleaning # break code into less options and verify before calling
+# Function to check which option Rusty will with
+# Note Rusty will choose 19 over 21 since the sum of the values is greater 10 (1+9) > 3 (2+1)
 def checkMax(pickedValue, heap):
     max = 0
     listofRustyChoice=[]
@@ -21,6 +23,7 @@ def checkMax(pickedValue, heap):
             heap.insert(listofRustyChoice[j],1)
     return listofRustyChoice[max], heap
 
+# Function to read in values from input.txt
 def readFile():
     file = open("input.txt", "r")
     i = 0
@@ -46,6 +49,7 @@ def readFile():
         i+=1
     return testVars, numTests
 
+# Function to create the PriorityQueue with data read in from file
 def dataStructure(ballVals,person):
     tupheap = heapTuple.PriorityQueue()
     for j in range(len(ballVals)):
@@ -55,9 +59,8 @@ def dataStructure(ballVals,person):
         tupheap.insert((int(ballVals[j]), sumVal),person)
     return tupheap
 
+# Function for displaying data at each players turn
 def printArguments(testVars):
-    print()
-    print()
     print("-----------------------------------------------------------------------------------------")
     print("Number of balls on the table: ",testVars[0])
     print("Max turns allowed:",testVars[1])
@@ -72,7 +75,7 @@ def printArguments(testVars):
 
 def algorithm(testVars, testCaseNum):
     print("Test Case:", testCaseNum)
-    #Declare variables with more readable names
+    # Declare variables
     person = printArguments(testVars)
     maxTurns = testVars[1]
     numBalls = testVars[0]
@@ -84,6 +87,7 @@ def algorithm(testVars, testCaseNum):
 
     #while there are still balls on the table
     while(len(tupheap)>0):
+        # Sort data by players prefered method of choosing a value
         tupheap.heapify(person)
         #loop through players turns
         for z in range(maxTurns):
@@ -103,13 +107,14 @@ def algorithm(testVars, testCaseNum):
     print("Time taken: ", time.perf_counter() - startTime)
     print("Sum of players:",playerSum)
     print("-----------------------------------------------------------------------------------------")
+    print()
+    print()
     return playerSum
 
 """ Driver """
 testVars, numTests = readFile()
-#logic
-#Iterate through all test cases
 results=[]
+# Iterate through all test cases
 for i in range(int(numTests)):
     results.append(algorithm(testVars[i],i+1))
 #write out results
